@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1795185427586,
+      "tag": "0000_create_pet_care_team",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795185496472,
+      "tag": "0001_secure_care_save_service",
+      "breakpoints": true
+    }
+  ]
+}

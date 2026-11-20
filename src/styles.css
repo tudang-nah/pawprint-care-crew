@@ -30,6 +30,15 @@
  */
 
 @theme inline {
+  --font-sans: 'Be Vietnam Pro', sans-serif;
+  --color-brand-header: var(--brand-header);
+  --color-brand-ink: var(--brand-ink);
+  --color-orange: var(--orange);
+  --color-orange-soft: var(--orange-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -73,25 +82,25 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 0.5rem;
+  --background: oklch(0.976 0.012 174);
+  --foreground: oklch(0.31 0.033 183);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.48 0.085 184);
   --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
+  --muted: oklch(0.959 0.015 174);
+  --muted-foreground: oklch(0.54 0.023 182);
+  --accent: oklch(0.933 0.028 174);
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
+  --border: oklch(0.919 0.018 174);
+  --input: oklch(0.89 0.018 174);
   --ring: oklch(0.704 0.04 256.788);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -106,6 +115,15 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --brand-header: oklch(0.43 0.08 182);
+  --brand-ink: oklch(0.99 0.007 174);
+  --orange: oklch(0.7 0.16 46);
+  --orange-soft: oklch(0.966 0.026 60);
+  --success: oklch(0.49 0.115 158);
+  --success-soft: oklch(0.956 0.032 157);
+  --info: oklch(0.52 0.098 232);
+  --info-soft: oklch(0.957 0.02 226);
+  --panel-shadow: 0 3px 14px oklch(0.35 0.035 180 / 0.035);
 }
 
 .dark {
@@ -151,5 +169,90 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0;
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.19 0.018 180);
+    --foreground: oklch(0.93 0.012 174);
+    --card: oklch(0.235 0.018 180);
+    --card-foreground: var(--foreground);
+    --popover: var(--card);
+    --popover-foreground: var(--foreground);
+    --primary: oklch(0.68 0.1 177);
+    --primary-foreground: oklch(0.19 0.025 180);
+    --muted: oklch(0.27 0.02 180);
+    --muted-foreground: oklch(0.7 0.017 180);
+    --secondary: var(--muted);
+    --secondary-foreground: var(--foreground);
+    --accent: oklch(0.3 0.03 180);
+    --accent-foreground: var(--foreground);
+    --border: oklch(0.34 0.025 180);
+    --input: var(--border);
+    --brand-header: oklch(0.28 0.057 182);
+    --orange-soft: oklch(0.3 0.043 55);
+    --success-soft: oklch(0.29 0.035 157);
+    --success: oklch(0.73 0.115 158);
+    --info-soft: oklch(0.29 0.035 226);
+    --info: oklch(0.76 0.08 232);
+  }
+}
+
+.app-width { width: min(1120px, calc(100% - 64px)); margin-inline: auto; }
+.app-header { background: var(--brand-header); color: var(--brand-ink); }
+.top-brand { display: flex; align-items: center; justify-content: space-between; min-height: 100px; gap: 20px; }
+.brand-symbol { width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid color-mix(in oklch, var(--brand-ink) 30%, transparent); border-radius: 12px; background: color-mix(in oklch, var(--brand-ink) 9%, transparent); }
+.app-nav { background: var(--card); border-bottom: 1px solid var(--border); }
+.tab-link { position: relative; padding: 22px 5px; display: inline-flex; align-items: center; gap: 10px; color: var(--muted-foreground); font-weight: 500; white-space: nowrap; }
+.tab-link.active { color: var(--primary); }
+.tab-link.active::after { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--orange); content: ''; border-radius: 3px 3px 0 0; }
+.page-heading { font-size: 26px; line-height: 1.4; font-weight: 700; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--panel-shadow); }
+.stat { padding: 24px; min-height: 136px; }
+.stat-value { font-size: 30px; font-weight: 700; line-height: 1.4; margin-top: 12px; font-variant-numeric: tabular-nums; }
+.icon-tile { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; background: var(--muted); color: var(--primary); }
+.field { display: grid; gap: 8px; font-size: 13px; font-weight: 500; min-width: 0; }
+.field input, .field select, .field textarea, .search-input { width: 100%; min-width: 0; background: var(--card); color: var(--foreground); border: 1px solid var(--input); border-radius: 6px; min-height: 42px; padding: 10px 12px; font-weight: 400; outline: none; }
+.field input:focus, .field select:focus, .field textarea:focus, .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in oklch, var(--primary) 15%, transparent); }
+.badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 5px; padding: 5px 9px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.status-booked { background: var(--orange-soft); color: var(--orange); }
+.status-caring { background: var(--info-soft); color: var(--info); }
+.status-completed { background: var(--success-soft); color: var(--success); }
+.status-cancelled { background: var(--muted); color: var(--muted-foreground); }
+.capacity-bar { height: 7px; background: var(--muted); border-radius: 5px; overflow: hidden; }
+.capacity-bar progress { display: block; width: 100%; height: 7px; appearance: none; border: 0; }
+.capacity-bar progress::-webkit-progress-bar { background: var(--muted); }
+.capacity-bar progress::-webkit-progress-value { background: var(--primary); border-radius: 5px; }
+.capacity-bar.boarding progress::-webkit-progress-value { background: var(--orange); }
+.capacity-bar.full progress::-webkit-progress-value { background: var(--destructive); }
+.capacity-bar progress::-moz-progress-bar { background: var(--primary); }
+.welcome-band { display: flex; align-items: center; min-height: 160px; position: relative; overflow: hidden; background: var(--muted); border-radius: 8px; }
+.welcome-image { width: 290px; height: 160px; object-fit: cover; object-position: 75% 60%; mix-blend-mode: multiply; }
+.appointment-table { width: 100%; border-collapse: collapse; text-align: left; }
+.appointment-table th { font-weight: 500; font-size: 11px; color: var(--muted-foreground); background: var(--muted); padding: 13px 20px; }
+.appointment-table td { border-top: 1px solid var(--border); padding: 18px 20px; vertical-align: middle; }
+.empty-state { min-height: 225px; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; padding: 28px; text-align: center; }
+.section-title { font-size: 16px; font-weight: 600; }
+.page-enter { animation: appear 250ms ease-out; }
+@keyframes appear { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .page-enter { animation: none; } }
+@media (max-width: 767px) {
+  .app-width { width: calc(100% - 32px); }
+  .top-brand { min-height: 92px; }
+  .tab-link { padding: 18px 1px; font-size: 11px; gap: 5px; }
+  .tab-link svg { width: 16px; }
+  .page-heading { font-size: 22px; }
+  .stat { padding: 16px; min-height: 120px; }
+  .stat-value { font-size: 24px; }
+  .welcome-image { width: 145px; height: 160px; object-position: 70% 50%; }
+  .appointment-table, .appointment-table tbody { display: block; }
+  .appointment-table thead { display: none; }
+  .appointment-table tr { display: grid; grid-template-columns: 1fr 1fr; padding: 12px; border-top: 1px solid var(--border); }
+  .appointment-table td { display: block; border: 0; padding: 8px; }
+  .appointment-table td:last-child { grid-column: 1 / -1; }
 }

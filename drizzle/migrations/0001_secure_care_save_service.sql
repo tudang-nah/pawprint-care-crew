@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION public.care_save(next_data jsonb, expected_version integer) RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$ DECLARE updated integer; BEGIN UPDATE public.care_state SET data=next_data, version=version+1 WHERE id=true AND version=expected_version RETURNING version INTO updated; IF updated IS NULL THEN RAISE EXCEPTION 'Dữ liệu vừa thay đổi. Vui lòng tải lại rồi thử lại.'; END IF; RETURN updated; END; $$;
+REVOKE ALL ON FUNCTION public.care_save(jsonb, integer) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.care_save(jsonb, integer) TO service_role;

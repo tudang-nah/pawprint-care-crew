@@ -1,23 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import { CalendarDays, CalendarPlus, Wallet, Users, Bath, House, ArrowRight, PawPrint } from 'lucide-react';
+import { CareShell } from '@/components/care-shell';
+import { BookingList, Notice, PageTitle } from '@/components/care-shared';
+import { Button } from '@/components/ui/button';
+import { useCareData } from '@/hooks/use-care-data';
+import { today, money, occupies, revenue, usage } from '@/lib/pet-care';
+import petWelcome from '@/assets/pet-welcome.asset.json';
+export const Route = createFileRoute('/')({ head: () => ({ meta: [{ title: 'Hôm nay · Trạm Chăm Boss' }, { name: 'description', content: 'Theo dõi lịch chăm sóc hôm nay, doanh thu và công suất tại Trạm Chăm Boss.' }, { property: 'og:title', content: 'Hôm nay · Trạm Chăm Boss' }, { property: 'og:description', content: 'Lịch chăm sóc thú cưng, doanh thu và công suất trong ngày.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }), component: Index });
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  const { data, save, ready, storageError } = useCareData();
+  const [date, setDate] = useState(today);
+  const bookings = data.bookings.filter(b => b.start === date || (b.kind === 'boarding' && (occupies(b, date) || b.end === date)));
+  const active = bookings.filter(b => b.status !== 'cancelled');
+  return <CareShell active="/"><PageTitle title="Hôm nay" subtitle="Một ngày mới, những chiếc boss đang chờ bạn."><div className="flex gap-3"><label className="field"><span className="sr-only">Chọn ngày</span><input aria-label="Chọn ngày" type="date" value={date} onChange={e => setDate(e.target.value || today())}/></label><Button className="h-[42px]" asChild><Link to="/dat-lich"><CalendarPlus/> Đặt lịch</Link></Button></div></PageTitle>{storageError && <Notice>{storageError}</Notice>}<div className="grid gap-4 sm:grid-cols-3"><div className="panel stat"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Lịch trong ngày</span><div className="icon-tile"><CalendarDays size={20}/></div></div><div className="stat-value">{active.length}<span className="ml-2 text-xs font-normal text-muted-foreground">lịch chăm sóc</span></div></div><div className="panel stat"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Doanh thu hoàn tất</span><div className="icon-tile bg-success-soft text-success"><Wallet size={20}/></div></div><div className="stat-value">{money(revenue(data.bookings, date))}</div></div><div className="panel stat"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Khách & thú cưng</span><div className="icon-tile bg-orange-soft text-orange"><Users size={20}/></div></div><div className="stat-value">{new Set(active.map(b => b.customerId)).size}<span className="mx-2 text-sm font-normal text-muted-foreground">khách /</span>{new Set(active.map(b => b.petId)).size}<span className="ml-2 text-xs font-normal text-muted-foreground">bé</span></div></div></div><section className="panel my-5 grid gap-6 px-6 py-5 sm:grid-cols-2 sm:gap-12">{(['spa', 'boarding'] as const).map(kind => { const used = usage(data.bookings, kind, date); const max = data.capacity[kind]; return <div key={kind}><div className="mb-3 flex items-center justify-between"><div className="flex items-center gap-2 text-sm font-medium">{kind === 'spa' ? <Bath size={17} className="text-primary"/> : <House size={17} className="text-orange"/>}{kind === 'spa' ? 'Lượt tắm/spa' : 'Chuồng lưu trú'}</div><span className={`text-sm font-semibold ${used >= max ? 'text-destructive' : ''}`}>{used}<span className="font-normal text-muted-foreground"> / {max}</span></span></div><div className={`capacity-bar ${kind} ${used >= max ? 'full' : ''}`}><progress aria-label={kind === 'spa' ? 'Công suất tắm/spa' : 'Công suất lưu trú'} max={Math.max(1, max)} value={max === 0 ? 1 : used}/></div><p className="mt-2 text-xs text-muted-foreground">{used >= max ? 'Đã hết chỗ trong ngày' : `Còn ${max - used} ${kind === 'spa' ? 'lượt chăm sóc' : 'chuồng trống'}`}</p></div>; })}</section><section className="panel overflow-hidden"><div className="flex items-center justify-between p-5"><div className="flex items-center gap-2"><h2 className="section-title">Lịch chăm sóc trong ngày</h2><span className="rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground">{bookings.length}</span></div><Link to="/dat-lich" className="flex items-center gap-1 text-xs text-primary">Tất cả lịch <ArrowRight size={14}/></Link></div>{ready ? <BookingList bookings={bookings} data={data} save={save}/> : <div className="empty-state text-muted-foreground">Đang đọc dữ liệu…</div>}</section><section className="welcome-band mt-6"><div className="flex-1 py-6 pl-6 sm:pl-8"><div className="mb-2 flex items-center gap-2 text-xs font-medium text-primary"><PawPrint size={16}/> GÓC NHỎ YÊU THƯƠNG</div><h2 className="text-lg font-semibold sm:text-xl">Boss vui, cả trạm vui.</h2><p className="mt-2 max-w-sm text-xs leading-relaxed text-muted-foreground">Chúc bạn một ngày chăm sóc thật nhiều niềm vui.</p></div><img className="welcome-image" src={petWelcome.url} alt="Chó Corgi và mèo bên chai sữa tắm"/></section></CareShell>;
 }
