@@ -1,0 +1,14 @@
+CREATE TABLE public.profiles (user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE, display_name text NOT NULL DEFAULT '' CHECK(length(display_name)<=100), avatar_path text NOT NULL DEFAULT '');
+GRANT SELECT, INSERT, UPDATE ON public.profiles TO authenticated;
+GRANT ALL ON public.profiles TO service_role;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY profile_read ON public.profiles FOR SELECT TO authenticated USING (user_id=auth.uid() OR public.care_has_access());
+CREATE POLICY profile_insert ON public.profiles FOR INSERT TO authenticated WITH CHECK(user_id=auth.uid() AND public.care_has_access());
+CREATE POLICY profile_update ON public.profiles FOR UPDATE TO authenticated USING(user_id=auth.uid() AND public.care_has_access()) WITH CHECK(user_id=auth.uid() AND (avatar_path='' OR split_part(avatar_path,'/',1)=auth.uid()::text));
+CREATE FUNCTION public.create_staff_profile() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN INSERT INTO public.profiles(user_id) VALUES(new.id) ON CONFLICT DO NOTHING; RETURN new; END; $$;
+CREATE TRIGGER staff_profile_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.create_staff_profile();
+INSERT INTO public.profiles(user_id) SELECT id FROM auth.users ON CONFLICT DO NOTHING;
+CREATE POLICY avatar_read ON storage.objects FOR SELECT TO authenticated USING(bucket_id='staff-avatars' AND public.care_has_access());
+CREATE POLICY avatar_insert ON storage.objects FOR INSERT TO authenticated WITH CHECK(bucket_id='staff-avatars' AND (storage.foldername(name))[1]=auth.uid()::text AND public.care_has_access());
+CREATE POLICY avatar_update ON storage.objects FOR UPDATE TO authenticated USING(bucket_id='staff-avatars' AND (storage.foldername(name))[1]=auth.uid()::text AND public.care_has_access()) WITH CHECK(bucket_id='staff-avatars' AND (storage.foldername(name))[1]=auth.uid()::text);
+CREATE POLICY avatar_delete ON storage.objects FOR DELETE TO authenticated USING(bucket_id='staff-avatars' AND (storage.foldername(name))[1]=auth.uid()::text AND public.care_has_access());

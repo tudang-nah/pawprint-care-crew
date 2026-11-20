@@ -28,3 +28,10 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep authenticated team data in one versioned Cloud state row; compare versions on every save to avoid overwriting concurrent changes.
+- Authorize shared reads through the approved-email membership table and validate booking prices, capacity and status transitions server-side before privileged writes.
+- Preserve booking snapshots when customers, pets or services are removed so completed revenue and historical records remain correct.
+- Render the shared team provider only after browser session verification; all data access still requires database authorization.
+- Store staff profile display fields separately from membership roles; avatar files are private and writable only by their owner.
