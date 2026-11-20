@@ -1,9 +1,0 @@
-import { Link } from '@tanstack/react-router';
-import { CalendarDays, CalendarPlus, Users, SlidersHorizontal, PawPrint, Cloud, LogOut } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
-import type { ReactNode } from 'react';
-const tabs = [ { to: '/', label: 'Hôm nay', icon: CalendarDays }, { to: '/dat-lich', label: 'Đặt lịch', icon: CalendarPlus }, { to: '/khach-thu-cung', label: 'Khách & thú cưng', icon: Users }, { to: '/dich-vu', label: 'Dịch vụ & công suất', icon: SlidersHorizontal } ] as const;
-export function CareShell({ children, active }: { children: ReactNode; active: string }) {
-  return <><header className="app-header"><div className="app-width top-brand"><div className="flex items-center gap-3"><div className="brand-symbol"><PawPrint size={28} /></div><div><div className="text-xl font-semibold">Trạm Chăm Boss<span className="ml-2 inline-block text-orange">.</span></div><div className="mt-2 flex items-center gap-1.5 text-xs opacity-80"><Cloud size={12} /> Dữ liệu đang lưu chung cho cả nhóm</div></div></div><Button variant="header" size="icon" aria-label="Đăng xuất" title="Đăng xuất" onClick={() => { void supabase.auth.signOut(); }}><LogOut/></Button></div></header><nav className="app-nav"><div className="app-width flex justify-between gap-3 sm:justify-start sm:gap-12">{tabs.map(t => <Link key={t.to} to={t.to} className={`tab-link ${active === t.to ? 'active' : ''}`}><t.icon size={19}/><span>{t.label}</span></Link>)}</div></nav><main className="app-width page-enter py-8 sm:py-10">{children}</main><footer className="app-width flex flex-wrap items-center justify-between gap-3 border-t border-border py-6 text-xs text-muted-foreground"><span className="flex items-center gap-2"><PawPrint size={14}/> Trạm Chăm Boss</span><span>Mỗi ngày một chút yêu thương.</span></footer></>;
-}

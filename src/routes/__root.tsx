@@ -6,14 +6,13 @@ import {
   useRouter,
   HeadContent,
   Scripts,
-  useLocation,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { TeamGate } from '@/components/team-gate';
+import { supabase } from '@/integrations/supabase/client';
 import { Toaster } from '@/components/ui/sonner';
 
 function NotFoundComponent() {
@@ -93,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap' },
       {
         rel: "stylesheet",
         href: appCss,
@@ -123,12 +122,20 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const location = useLocation();
+  const router = useRouter();
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      if (event === "SIGNED_OUT") { queryClient.clear(); } else { void queryClient.invalidateQueries(); }
+      void router.invalidate();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [queryClient, router]);
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      {location.pathname === '/reset-password' ? <Outlet/> : <TeamGate><Outlet/></TeamGate>}
+      <Outlet />
       <Toaster richColors position="bottom-right"/>
     </QueryClientProvider>
   );

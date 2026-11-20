@@ -10,29 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DatLichRouteImport } from './routes/dat-lich'
-import { Route as DichVuRouteImport } from './routes/dich-vu'
-import { Route as KhachThuCungRouteImport } from './routes/khach-thu-cung'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedDatLichRouteImport } from './routes/_authenticated/dat-lich'
+import { Route as AuthenticatedLichCuaToiRouteImport } from './routes/_authenticated/lich-cua-toi'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DatLichRoute = DatLichRouteImport.update({
-  id: '/dat-lich',
-  path: '/dat-lich',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DichVuRoute = DichVuRouteImport.update({
-  id: '/dich-vu',
-  path: '/dich-vu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KhachThuCungRoute = KhachThuCungRouteImport.update({
-  id: '/khach-thu-cung',
-  path: '/khach-thu-cung',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -40,49 +35,59 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDatLichRoute = AuthenticatedDatLichRouteImport.update({
+  id: '/dat-lich',
+  path: '/dat-lich',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLichCuaToiRoute = AuthenticatedLichCuaToiRouteImport.update({
+  id: '/lich-cua-toi',
+  path: '/lich-cua-toi',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dat-lich': typeof DatLichRoute
-  '/dich-vu': typeof DichVuRoute
-  '/khach-thu-cung': typeof KhachThuCungRoute
+  '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/dat-lich': typeof AuthenticatedDatLichRoute
+  '/lich-cua-toi': typeof AuthenticatedLichCuaToiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dat-lich': typeof DatLichRoute
-  '/dich-vu': typeof DichVuRoute
-  '/khach-thu-cung': typeof KhachThuCungRoute
+  '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/dat-lich': typeof AuthenticatedDatLichRoute
+  '/lich-cua-toi': typeof AuthenticatedLichCuaToiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dat-lich': typeof DatLichRoute
-  '/dich-vu': typeof DichVuRoute
-  '/khach-thu-cung': typeof KhachThuCungRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/dat-lich': typeof AuthenticatedDatLichRoute
+  '/_authenticated/lich-cua-toi': typeof AuthenticatedLichCuaToiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    '/' | '/dat-lich' | '/dich-vu' | '/khach-thu-cung' | '/reset-password'
+  fullPaths: '/' | '/auth' | '/reset-password' | '/dat-lich' | '/lich-cua-toi'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dat-lich' | '/dich-vu' | '/khach-thu-cung' | '/reset-password'
+  to: '/' | '/auth' | '/reset-password' | '/dat-lich' | '/lich-cua-toi'
   id:
     | '__root__'
     | '/'
-    | '/dat-lich'
-    | '/dich-vu'
-    | '/khach-thu-cung'
+    | '/_authenticated'
+    | '/auth'
     | '/reset-password'
+    | '/_authenticated/dat-lich'
+    | '/_authenticated/lich-cua-toi'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DatLichRoute: typeof DatLichRoute
-  DichVuRoute: typeof DichVuRoute
-  KhachThuCungRoute: typeof KhachThuCungRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
@@ -95,25 +100,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dat-lich': {
-      id: '/dat-lich'
-      path: '/dat-lich'
-      fullPath: '/dat-lich'
-      preLoaderRoute: typeof DatLichRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dich-vu': {
-      id: '/dich-vu'
-      path: '/dich-vu'
-      fullPath: '/dich-vu'
-      preLoaderRoute: typeof DichVuRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/khach-thu-cung': {
-      id: '/khach-thu-cung'
-      path: '/khach-thu-cung'
-      fullPath: '/khach-thu-cung'
-      preLoaderRoute: typeof KhachThuCungRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -123,14 +121,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dat-lich': {
+      id: '/_authenticated/dat-lich'
+      path: '/dat-lich'
+      fullPath: '/dat-lich'
+      preLoaderRoute: typeof AuthenticatedDatLichRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/lich-cua-toi': {
+      id: '/_authenticated/lich-cua-toi'
+      path: '/lich-cua-toi'
+      fullPath: '/lich-cua-toi'
+      preLoaderRoute: typeof AuthenticatedLichCuaToiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDatLichRoute: typeof AuthenticatedDatLichRoute
+  AuthenticatedLichCuaToiRoute: typeof AuthenticatedLichCuaToiRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDatLichRoute: AuthenticatedDatLichRoute,
+  AuthenticatedLichCuaToiRoute: AuthenticatedLichCuaToiRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DatLichRoute: DatLichRoute,
-  DichVuRoute: DichVuRoute,
-  KhachThuCungRoute: KhachThuCungRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport

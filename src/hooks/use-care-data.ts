@@ -1,1 +1,0 @@
-export { useSharedCare as useCareData } from '@/components/care-access';
