@@ -2,6 +2,7 @@ import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
 import { CalendarDays, CalendarRange, Users, Tags, LogOut, Moon, Sun } from 'lucide-react';
 import { roleOptions } from '@/lib/queries';
+import { useLiveAdmin } from '@/lib/use-live-admin';
 import { Brand } from '@/components/care-shared';
 import { useSignOut } from '@/components/customer-shell';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ const links = [
 ] as const;
 function AdminLayout() {
   const { role } = Route.useRouteContext(); const signOut = useSignOut(); const [dark, setDark] = useState(false);
+  useLiveAdmin();
   useEffect(() => { const v = localStorage.getItem('tcb-dark'); setDark(v === '1' || (v === null && window.matchMedia('(prefers-color-scheme: dark)').matches)); }, []);
   function toggle() { localStorage.setItem('tcb-dark', dark ? '0' : '1'); setDark(!dark); }
   const visible = links.filter(l => !l.admin || role === 'admin');
