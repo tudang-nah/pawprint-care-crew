@@ -15,6 +15,11 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedDatLichRouteImport } from './routes/_authenticated/dat-lich'
 import { Route as AuthenticatedLichCuaToiRouteImport } from './routes/_authenticated/lich-cua-toi'
+import { Route as AuthenticatedQuanTriRouteRouteImport } from './routes/_authenticated/quan-tri/route'
+import { Route as AuthenticatedQuanTriIndexRouteImport } from './routes/_authenticated/quan-tri/index'
+import { Route as AuthenticatedQuanTriDichVuRouteImport } from './routes/_authenticated/quan-tri/dich-vu'
+import { Route as AuthenticatedQuanTriKhachHangRouteImport } from './routes/_authenticated/quan-tri/khach-hang'
+import { Route as AuthenticatedQuanTriLichRouteImport } from './routes/_authenticated/quan-tri/lich'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,13 +50,48 @@ const AuthenticatedLichCuaToiRoute = AuthenticatedLichCuaToiRouteImport.update({
   path: '/lich-cua-toi',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedQuanTriRouteRoute =
+  AuthenticatedQuanTriRouteRouteImport.update({
+    id: '/quan-tri',
+    path: '/quan-tri',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedQuanTriIndexRoute =
+  AuthenticatedQuanTriIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedQuanTriRouteRoute,
+  } as any)
+const AuthenticatedQuanTriDichVuRoute =
+  AuthenticatedQuanTriDichVuRouteImport.update({
+    id: '/dich-vu',
+    path: '/dich-vu',
+    getParentRoute: () => AuthenticatedQuanTriRouteRoute,
+  } as any)
+const AuthenticatedQuanTriKhachHangRoute =
+  AuthenticatedQuanTriKhachHangRouteImport.update({
+    id: '/khach-hang',
+    path: '/khach-hang',
+    getParentRoute: () => AuthenticatedQuanTriRouteRoute,
+  } as any)
+const AuthenticatedQuanTriLichRoute =
+  AuthenticatedQuanTriLichRouteImport.update({
+    id: '/lich',
+    path: '/lich',
+    getParentRoute: () => AuthenticatedQuanTriRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/quan-tri': typeof AuthenticatedQuanTriRouteRouteWithChildren
   '/dat-lich': typeof AuthenticatedDatLichRoute
   '/lich-cua-toi': typeof AuthenticatedLichCuaToiRoute
+  '/quan-tri/dich-vu': typeof AuthenticatedQuanTriDichVuRoute
+  '/quan-tri/khach-hang': typeof AuthenticatedQuanTriKhachHangRoute
+  '/quan-tri/lich': typeof AuthenticatedQuanTriLichRoute
+  '/quan-tri/': typeof AuthenticatedQuanTriIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +99,10 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/dat-lich': typeof AuthenticatedDatLichRoute
   '/lich-cua-toi': typeof AuthenticatedLichCuaToiRoute
+  '/quan-tri/dich-vu': typeof AuthenticatedQuanTriDichVuRoute
+  '/quan-tri/khach-hang': typeof AuthenticatedQuanTriKhachHangRoute
+  '/quan-tri/lich': typeof AuthenticatedQuanTriLichRoute
+  '/quan-tri': typeof AuthenticatedQuanTriIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -66,22 +110,51 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/quan-tri': typeof AuthenticatedQuanTriRouteRouteWithChildren
   '/_authenticated/dat-lich': typeof AuthenticatedDatLichRoute
   '/_authenticated/lich-cua-toi': typeof AuthenticatedLichCuaToiRoute
+  '/_authenticated/quan-tri/dich-vu': typeof AuthenticatedQuanTriDichVuRoute
+  '/_authenticated/quan-tri/khach-hang': typeof AuthenticatedQuanTriKhachHangRoute
+  '/_authenticated/quan-tri/lich': typeof AuthenticatedQuanTriLichRoute
+  '/_authenticated/quan-tri/': typeof AuthenticatedQuanTriIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/reset-password' | '/dat-lich' | '/lich-cua-toi'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/quan-tri'
+    | '/dat-lich'
+    | '/lich-cua-toi'
+    | '/quan-tri/dich-vu'
+    | '/quan-tri/khach-hang'
+    | '/quan-tri/lich'
+    | '/quan-tri/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/reset-password' | '/dat-lich' | '/lich-cua-toi'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/dat-lich'
+    | '/lich-cua-toi'
+    | '/quan-tri/dich-vu'
+    | '/quan-tri/khach-hang'
+    | '/quan-tri/lich'
+    | '/quan-tri'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/reset-password'
+    | '/_authenticated/quan-tri'
     | '/_authenticated/dat-lich'
     | '/_authenticated/lich-cua-toi'
+    | '/_authenticated/quan-tri/dich-vu'
+    | '/_authenticated/quan-tri/khach-hang'
+    | '/_authenticated/quan-tri/lich'
+    | '/_authenticated/quan-tri/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -135,15 +208,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLichCuaToiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/quan-tri': {
+      id: '/_authenticated/quan-tri'
+      path: '/quan-tri'
+      fullPath: '/quan-tri'
+      preLoaderRoute: typeof AuthenticatedQuanTriRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/quan-tri/': {
+      id: '/_authenticated/quan-tri/'
+      path: '/'
+      fullPath: '/quan-tri/'
+      preLoaderRoute: typeof AuthenticatedQuanTriIndexRouteImport
+      parentRoute: typeof AuthenticatedQuanTriRouteRoute
+    }
+    '/_authenticated/quan-tri/dich-vu': {
+      id: '/_authenticated/quan-tri/dich-vu'
+      path: '/dich-vu'
+      fullPath: '/quan-tri/dich-vu'
+      preLoaderRoute: typeof AuthenticatedQuanTriDichVuRouteImport
+      parentRoute: typeof AuthenticatedQuanTriRouteRoute
+    }
+    '/_authenticated/quan-tri/khach-hang': {
+      id: '/_authenticated/quan-tri/khach-hang'
+      path: '/khach-hang'
+      fullPath: '/quan-tri/khach-hang'
+      preLoaderRoute: typeof AuthenticatedQuanTriKhachHangRouteImport
+      parentRoute: typeof AuthenticatedQuanTriRouteRoute
+    }
+    '/_authenticated/quan-tri/lich': {
+      id: '/_authenticated/quan-tri/lich'
+      path: '/lich'
+      fullPath: '/quan-tri/lich'
+      preLoaderRoute: typeof AuthenticatedQuanTriLichRouteImport
+      parentRoute: typeof AuthenticatedQuanTriRouteRoute
+    }
   }
 }
 
+interface AuthenticatedQuanTriRouteRouteChildren {
+  AuthenticatedQuanTriDichVuRoute: typeof AuthenticatedQuanTriDichVuRoute
+  AuthenticatedQuanTriKhachHangRoute: typeof AuthenticatedQuanTriKhachHangRoute
+  AuthenticatedQuanTriLichRoute: typeof AuthenticatedQuanTriLichRoute
+  AuthenticatedQuanTriIndexRoute: typeof AuthenticatedQuanTriIndexRoute
+}
+
+const AuthenticatedQuanTriRouteRouteChildren: AuthenticatedQuanTriRouteRouteChildren =
+  {
+    AuthenticatedQuanTriDichVuRoute: AuthenticatedQuanTriDichVuRoute,
+    AuthenticatedQuanTriKhachHangRoute: AuthenticatedQuanTriKhachHangRoute,
+    AuthenticatedQuanTriLichRoute: AuthenticatedQuanTriLichRoute,
+    AuthenticatedQuanTriIndexRoute: AuthenticatedQuanTriIndexRoute,
+  }
+
+const AuthenticatedQuanTriRouteRouteWithChildren =
+  AuthenticatedQuanTriRouteRoute._addFileChildren(
+    AuthenticatedQuanTriRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedQuanTriRouteRoute: typeof AuthenticatedQuanTriRouteRouteWithChildren
   AuthenticatedDatLichRoute: typeof AuthenticatedDatLichRoute
   AuthenticatedLichCuaToiRoute: typeof AuthenticatedLichCuaToiRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedQuanTriRouteRoute: AuthenticatedQuanTriRouteRouteWithChildren,
   AuthenticatedDatLichRoute: AuthenticatedDatLichRoute,
   AuthenticatedLichCuaToiRoute: AuthenticatedLichCuaToiRoute,
 }
