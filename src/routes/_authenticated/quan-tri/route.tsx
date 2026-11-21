@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { CalendarDays, CalendarRange, Users, Tags, LineChart, UserCog, LogOut, Moon, Sun } from 'lucide-react';
+import { CalendarDays, CalendarRange, Users, Tags, LogOut, Moon, Sun } from 'lucide-react';
 import { roleOptions } from '@/lib/queries';
 import { Brand } from '@/components/care-shared';
 import { useSignOut } from '@/components/customer-shell';
@@ -15,8 +15,6 @@ const links = [
   { to: '/quan-tri/lich', label: 'Lịch', icon: CalendarRange, admin: false, exact: false },
   { to: '/quan-tri/khach-hang', label: 'Khách hàng', icon: Users, admin: false, exact: false },
   { to: '/quan-tri/dich-vu', label: 'Dịch vụ & Đơn giá', icon: Tags, admin: false, exact: false },
-  { to: '/quan-tri/doanh-thu', label: 'Doanh thu', icon: LineChart, admin: true, exact: false },
-  { to: '/quan-tri/cong-su', label: 'Cộng sự', icon: UserCog, admin: true, exact: false },
 ] as const;
 function AdminLayout() {
   const { role } = Route.useRouteContext(); const signOut = useSignOut(); const [dark, setDark] = useState(false);

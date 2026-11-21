@@ -3,7 +3,7 @@ import { PawPrint, LogOut } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { statusLabel, type BookingStatus } from '@/lib/booking';
 import { Skeleton } from '@/components/ui/skeleton';
-export function Field({ label, children, error }: { label: string; children: ReactNode; error?: string }) { return <label className="field">{label}{children}{error && <span className="text-xs font-medium text-destructive">{error}</span>}</label>; }
+export function Field({ label, children, error }: { label: string; children: ReactNode; error?: string | undefined }) { return <label className="field">{label}{children}{error && <span className="text-xs font-medium text-destructive">{error}</span>}</label>; }
 export function Notice({ children }: { children: ReactNode }) { return <div role="alert" className="mb-4 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">{children}</div>; }
 export function PageTitle({ title, subtitle, children }: { title: string; subtitle?: string; children?: ReactNode }) { return <div className="mb-6 flex flex-wrap items-end justify-between gap-4"><div><h1 className="page-heading">{title}</h1>{subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}</div>{children}</div>; }
 export function StatusBadge({ status }: { status: BookingStatus }) { return <span className={`badge status-${status}`}>{statusLabel[status]}</span>; }
